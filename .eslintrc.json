@@ -10,9 +10,28 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "semi": "error",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "no-extra-parens": 0,
+    "quotes": [2, "double"],
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "none"
+      }
+    ],
+    "no-underscore-dangle": 0,
+    "arrow-body-style": 0,
+    "one-var": [
+      "error",
+      {
+        "uninitialized": "always",
+        "initialized": "never"
+      }
+    ]
   },
   "settings": {
     "react": {
