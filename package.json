@@ -1,0 +1,42 @@
+{
+  "name": "recipe_planner",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "repository": "git@github.com:tcnguyen483/recipe_planner",
+  "author": "Thanh Nguyen Jr <tcnguyen483@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "NODE_ENV=development webpack serve --open --mode development",
+    "test": "eslint src/**.tsx",
+    "build": "NODE_ENV=production webpack --mode production"
+  },
+  "dependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-react": "^7.12.13",
+    "@babel/preset-typescript": "^7.13.0",
+    "@babel/runtime": "^7.13.10",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@types/fork-ts-checker-webpack-plugin": "^0.4.5",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@types/webpack": "^4.41.26",
+    "@types/webpack-dev-server": "^3.11.2",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "babel-loader": "^8.2.2",
+    "eslint": "^7.22.0",
+    "eslint-plugin-react": "^7.23.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "fork-ts-checker-webpack-plugin": "^6.2.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3",
+    "webpack": "^5.27.2",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
