@@ -8,8 +8,7 @@
   "scripts": {
     "start": "NODE_ENV=development webpack serve --open --mode development",
     "test": "eslint src/**.tsx",
-    "build": "yarn clean; NODE_ENV=production webpack --mode production",
-    "clean": "rm build/bundle.js bundle.js.LICENSE.txt"
+    "build": "NODE_ENV=production webpack --mode production"
   },
   "dependencies": {
     "@babel/core": "^7.13.10",
@@ -32,7 +31,6 @@
     "eslint-plugin-react": "^7.23.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "fork-ts-checker-webpack-plugin": "^6.2.0",
-    "html-webpack-plugin": "^5.3.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "ts-node": "^9.1.1",
