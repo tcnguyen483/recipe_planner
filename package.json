@@ -6,11 +6,10 @@
   "author": "Thanh Nguyen Jr <tcnguyen483@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "NODE_ENV=development webpack-dev-server",
+    "start": "NODE_ENV=development webpack serve --open --mode development",
     "test": "eslint src/**.tsx",
-    "build": "yarn clean; NODE_ENV=production webpack --colors",
-    "clean": "rimraf dist",
-    "deploy": "yarn build; surge -p dist -d decodeme.surge.sh; yarn clean"
+    "build": "yarn clean; NODE_ENV=production webpack --mode production",
+    "clean": "rm build/bundle.js bundle.js.LICENSE.txt"
   },
   "dependencies": {
     "@babel/core": "^7.13.10",
@@ -32,6 +31,7 @@
     "eslint-plugin-react": "^7.23.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "fork-ts-checker-webpack-plugin": "^6.2.0",
+    "html-webpack-plugin": "^5.3.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "ts-node": "^9.1.1",
