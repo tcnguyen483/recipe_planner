@@ -1,5 +1,5 @@
 /*
- * Container component for the main application.
+ * Recipe card displays data about one recipe.
  * 
  * Bootstrapped from: 
  * https://material-ui.com/components/cards/#RecipeReviewCard.tsx
@@ -22,7 +22,6 @@ import {
 import { Create, ExpandMore, Favorite, Share } from "@material-ui/icons";
 import React from "react";
 import clsx from "clsx";
-import { red } from "@material-ui/core/colors";
 import { useState } from "react";
 
 export interface RecipeCardProps {
@@ -52,10 +51,7 @@ const RecipeCard = (props: RecipeCardProps): JSX.Element => {
       },
       expandOpen: {
         transform: "rotate(180deg)",
-      },
-      avatar: {
-        backgroundColor: red[500],
-      },
+      }
     }),
   );
 
