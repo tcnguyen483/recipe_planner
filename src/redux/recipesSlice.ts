@@ -11,7 +11,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../app/store";
 
 export enum RecipeLoadingStatus {
-  NOT_LOADED = "Not Loaded",
+  NOT_LOADED = "Not Loaded", // eslint-disable-line no-unused-vars
   LOADING = "Loading", // eslint-disable-line no-unused-vars
   LOADED = "Loaded", // eslint-disable-line no-unused-vars
   ERROR = "Error", // eslint-disable-line no-unused-vars
@@ -60,9 +60,11 @@ const recipesSlice = createSlice({
   },
 });
 
-export const selectData = (state: RootState) => state.recipes.recipes;
-export const selectRecipesLoadingStatus = (state: RootState) =>
-  state.recipes.loadingStatus;
+export const selectData = (state: RootState): Array<Recipe> =>
+  state.recipes.recipes;
+export const selectRecipesLoadingStatus = (
+  state: RootState
+): RecipeLoadingStatus => state.recipes.loadingStatus;
 
 export const {
   setRecipes,
