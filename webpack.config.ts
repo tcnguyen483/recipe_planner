@@ -1,6 +1,6 @@
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import path from "path";
 import webpack from "webpack";
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 
 const config: webpack.Configuration = {
   entry: "./src/index.tsx",
@@ -28,13 +28,13 @@ const config: webpack.Configuration = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
-    publicPath: '/'
+    publicPath: "/",
   },
   devServer: {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
     port: 4000,
-    hot: true
+    hot: true,
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin({
@@ -42,7 +42,7 @@ const config: webpack.Configuration = {
       eslint: {
         files: "./src/**/*",
       },
-    })
+    }),
   ],
 };
 

@@ -5,34 +5,26 @@
  * https://material-ui.com/components/cards/#RecipeReviewCard.tsx
  */
 
-import { 
-  Card, 
-  CardActions, 
-  CardContent, 
-  CardHeader, 
-  Collapse, 
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Collapse,
   IconButton, 
+  Link,
   ListItem,
   ListItemText,
   Theme,
-  Typography,
-  createStyles,
-  makeStyles 
+  Typography, createStyles,
+  makeStyles
 } from "@material-ui/core";
 import { Create, ExpandMore, Favorite, Share } from "@material-ui/icons";
-import React from "react";
+import React, { useState } from "react";
+import { Recipe } from "../../redux/recipesSlice";
 import clsx from "clsx";
-import { useState } from "react";
 
-export interface RecipeCardProps {
-  title: string;
-  ingredients: Array<string>;
-  instructions: Array<string>;
-  dateAdded: Date;
-  description?: string;
-}
-
-const RecipeCard = (props: RecipeCardProps): JSX.Element => {
+const RecipeCard = (props: Recipe): JSX.Element => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
@@ -80,6 +72,16 @@ const RecipeCard = (props: RecipeCardProps): JSX.Element => {
     </CardContent>
   ) : null;
 
+  const originalSourceLink = (
+    <Link 
+      href={props.sourceURL} 
+      rel="noreferrer" 
+      target="_blank"
+      aria-label="link to recipe source"
+    >
+      Original Recipe
+    </Link>);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -93,7 +95,7 @@ const RecipeCard = (props: RecipeCardProps): JSX.Element => {
           </IconButton>
         }
         title={props.title}
-        subheader={dateAdded}
+        subheader={originalSourceLink}
       />
       {props.description && description}
       <CardActions disableSpacing>
