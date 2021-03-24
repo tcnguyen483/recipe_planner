@@ -15,6 +15,14 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off",
+    "react/jsx-closing-bracket-location": [
+      "enabled",
+      {
+        "nonEmpty": "tag-aligned",
+        "selfClosing": false
+      }
+    ],
+    "react/jsx-closing-tag-location": "error",
     "no-extra-parens": 0,
     "quotes": [2, "double"],
     "no-unused-vars": [
