@@ -60,7 +60,7 @@ const recipesSlice = createSlice({
   },
 });
 
-export const selectData = (state: RootState): Array<Recipe> =>
+export const selectRecipes = (state: RootState): Array<Recipe> =>
   state.recipes.recipes;
 export const selectRecipesLoadingStatus = (
   state: RootState
