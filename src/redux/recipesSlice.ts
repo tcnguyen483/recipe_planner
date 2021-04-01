@@ -44,6 +44,7 @@ export interface Recipe {
   ingredients: Array<string>;
   instructions: Array<string>;
   tags: Array<RecipeTags>;
+  calories: number;
   dateAdded: Date;
   sourceURL: string;
   description?: string;
