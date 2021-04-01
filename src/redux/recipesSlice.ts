@@ -1,3 +1,5 @@
+/* eslint-disable sort-imports */
+/* eslint-disable no-unused-vars */
 /*
  * Redux logic for all of the recipe cards data.
  *
@@ -8,19 +10,40 @@
 
 // eslint-disable-next-line no-unused-vars
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { ROOT_URL } from "../services/phoBackend";
 import type { RootState } from "../app/store";
 
 export enum RecipeLoadingStatus {
-  NOT_LOADED = "Not Loaded", // eslint-disable-line no-unused-vars
-  LOADING = "Loading", // eslint-disable-line no-unused-vars
-  LOADED = "Loaded", // eslint-disable-line no-unused-vars
-  ERROR = "Error", // eslint-disable-line no-unused-vars
+  ERROR = "Error",
+  LOADED = "Loaded",
+  LOADING = "Loading",
+  NOT_LOADED = "Not Loaded",
+}
+
+export enum RecipeTags {
+  BEEF = "beef",
+  CHICK = "chicken",
+  DAIRY = "dairy",
+  DUCK = "duck",
+  FISH = "fish",
+  GF = "gluten free",
+  HALAL = "halal",
+  KOSHER = "kosher",
+  PEANUT = "contains peanuts",
+  PORK = "pork",
+  SOY = "soy",
+  TNUT = "contains tree nuts",
+  VEGAN = "vegan",
+  VEGE = "vegetarian",
+  VENISON = "venison",
 }
 
 export interface Recipe {
   title: string;
   ingredients: Array<string>;
   instructions: Array<string>;
+  tags: Array<RecipeTags>;
   dateAdded: Date;
   sourceURL: string;
   description?: string;
@@ -65,6 +88,16 @@ export const selectRecipes = (state: RootState): Array<Recipe> =>
 export const selectRecipesLoadingStatus = (
   state: RootState
 ): RecipeLoadingStatus => state.recipes.loadingStatus;
+
+export const getRecipes = async (): Promise<Array<Recipe> | null> => {
+  try {
+    const res = await axios.get(`${ROOT_URL}/recipes`);
+    return res.data as Array<Recipe>;
+  } catch (error) {
+    console.log(`error: ${error}`);
+    return null;
+  }
+};
 
 export const {
   setRecipes,

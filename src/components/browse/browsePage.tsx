@@ -13,7 +13,8 @@ const BrowsePage = (): JSX.Element => {
     createStyles({
       root: {
         width: "100%",
-        backgroundColor: theme.palette.background.paper
+        backgroundColor: theme.palette.background.paper,
+        flexWrap: "wrap"
       }
     }),
   );
