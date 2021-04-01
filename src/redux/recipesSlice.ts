@@ -45,6 +45,7 @@ export interface Recipe {
   instructions: Array<string>;
   tags: Array<RecipeTags>;
   calories: number;
+  authorID: string; // mongo object ID of the user who added this recipe
   dateAdded: Date;
   sourceURL: string;
   description?: string;
