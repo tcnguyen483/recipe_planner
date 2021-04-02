@@ -28,7 +28,9 @@ const RecipeCard = (props: Recipe): JSX.Element => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
-        maxWidth: 345,
+        width: 345,
+        margin: 8,
+        height: "min-content"
       },
       media: {
         height: 0,
@@ -43,6 +45,9 @@ const RecipeCard = (props: Recipe): JSX.Element => {
       },
       expandOpen: {
         transform: "rotate(180deg)",
+      },
+      link: {
+        cursor: "pointer"
       }
     }),
   );
@@ -58,10 +63,10 @@ const RecipeCard = (props: Recipe): JSX.Element => {
       </ListItem>)
     );
     return (
-      <>
+      <div key={header}>
         <Typography paragraph>{header}</Typography>
         {ingredientList}
-      </>
+      </div>
     );
   }); 
 
@@ -73,14 +78,14 @@ const RecipeCard = (props: Recipe): JSX.Element => {
       </ListItem>)
     );
     return (
-      <>
-        <Typography paragraph>{header}</Typography>
+      <div key={header}>
+        <Typography paragraph >{header}</Typography>
         {instructionsList}
-      </>
+      </div>
     );
   }); 
 
-  // const dateAdded = props.dateAdded.toLocaleDateString();
+  const dateAddedString = (new Date(props.dateAdded)).toDateString();
 
   const description = props.description ? (
     <CardContent>
@@ -90,15 +95,16 @@ const RecipeCard = (props: Recipe): JSX.Element => {
     </CardContent>
   ) : null;
 
-  const originalSourceLink = (
+  const originalSourceLink = props.sourceURL ? (
     <Link 
       href={props.sourceURL} 
       rel="noreferrer" 
       target="_blank"
       aria-label="link to recipe source"
+      className={classes.link}
     >
       Original Recipe
-    </Link>);
+    </Link>) : null;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -136,6 +142,9 @@ const RecipeCard = (props: Recipe): JSX.Element => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
+          <Typography variant="body1" component="p" >
+            {dateAddedString}
+          </Typography>
           {ingredientSections}
           {instructionSections}
         </CardContent>

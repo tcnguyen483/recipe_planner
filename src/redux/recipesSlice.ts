@@ -91,7 +91,7 @@ export interface Recipe {
   authorID: string; // mongo object ID of the user who added this recipe
   dateAdded: Date;
   sourceURL: string;
-  description?: string;
+  description: string;
 }
 
 // define a type for the slice states
@@ -112,9 +112,7 @@ export const getAndLoadRecipes = createAsyncThunk(
   "recipes/getAndLoadRecipes",
   async () => {
     try {
-      console.log("in func");
       const res = await axios.get(`${ROOT_URL}/recipes`);
-      console.log(res.data);
       return res.data as Array<Recipe>;
     } catch (error) {
       console.log(`error: ${error}`);
@@ -148,6 +146,9 @@ const recipesSlice = createSlice({
     builder.addCase(getAndLoadRecipes.fulfilled, (state, { payload }) => {
       state.recipes = payload;
       state.loadingStatus = RecipeLoadingStatus.LOADED;
+    });
+    builder.addCase(getAndLoadRecipes.rejected, (state) => {
+      state.loadingStatus = RecipeLoadingStatus.ERROR;
     });
   },
 });

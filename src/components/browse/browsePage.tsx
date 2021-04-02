@@ -13,8 +13,14 @@ const BrowsePage = (): JSX.Element => {
     createStyles({
       root: {
         width: "100%",
+        display: "flex",
         backgroundColor: theme.palette.background.paper,
-        flexWrap: "wrap"
+        flexWrap: "wrap",
+        flexDirection: "row"
+      },
+      spinner: {
+        alignSelf: "center",
+        justifySelf: "center"
       }
     }),
   );
@@ -26,7 +32,7 @@ const BrowsePage = (): JSX.Element => {
   const recipes = useAppSelector(selectRecipes);
   const recipeLoadingStatus = useAppSelector(selectRecipesLoadingStatus);
 
-  const loadSpinner = <CircularProgress />;
+  const loadSpinner = <CircularProgress className={classes.spinner}/>;
 
   const recipeCards = recipes.length > 0 ? recipes.map((recipe) => (
     <RecipeCard
@@ -39,6 +45,7 @@ const BrowsePage = (): JSX.Element => {
       authorID={recipe.authorID}
       dateAdded={recipe.dateAdded}
       sourceURL={recipe.sourceURL}
+      description={recipe.description}
       key={recipe.id}
     />
   )) : null;
@@ -47,6 +54,8 @@ const BrowsePage = (): JSX.Element => {
     if (recipeLoadingStatus === RecipeLoadingStatus.NOT_LOADED) {
       dispatch(setRecipesLoadingStatus(RecipeLoadingStatus.LOADING));
       dispatch(getAndLoadRecipes());
+    } else if (recipeLoadingStatus === RecipeLoadingStatus.ERROR) {
+      console.log("There was an error while trying to fetch the recipe data.");
     }
   }, [recipeLoadingStatus, dispatch]);
 
