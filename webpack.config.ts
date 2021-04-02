@@ -33,7 +33,7 @@ const config: webpack.Configuration = {
   devServer: {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
-    port: 4000,
+    port: 8080,
     hot: true,
   },
   plugins: [

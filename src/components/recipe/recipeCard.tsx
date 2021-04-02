@@ -50,19 +50,37 @@ const RecipeCard = (props: Recipe): JSX.Element => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
 
-  const ingredients = props.ingredients.map((name) => (
-    <ListItem key={name}>
-      <ListItemText primary={name} /> 
-    </ListItem>)
-  );
+  const ingredientSections = Object.values(props.ingredients).map((section) => {
+    const { header, ingredients } = section;
+    const ingredientList = ingredients.map((name) => (
+      <ListItem key={name}>
+        <ListItemText primary={name} /> 
+      </ListItem>)
+    );
+    return (
+      <>
+        <Typography paragraph>{header}</Typography>
+        {ingredientList}
+      </>
+    );
+  }); 
 
-  const instructions = props.instructions.map((ins) => (
-    <ListItem key={ins}>
-      <ListItemText primary={ins} /> 
-    </ListItem>)
-  );
+  const instructionSections = Object.values(props.instructions).map((section) => {
+    const { header, instructions } = section;
+    const instructionsList = instructions.map((ins) => (
+      <ListItem key={ins}>
+        <ListItemText primary={ins} /> 
+      </ListItem>)
+    );
+    return (
+      <>
+        <Typography paragraph>{header}</Typography>
+        {instructionsList}
+      </>
+    );
+  }); 
 
-  const dateAdded = props.dateAdded.toLocaleDateString();
+  // const dateAdded = props.dateAdded.toLocaleDateString();
 
   const description = props.description ? (
     <CardContent>
@@ -118,10 +136,8 @@ const RecipeCard = (props: Recipe): JSX.Element => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Ingredients:</Typography>
-          {ingredients}
-          <Typography paragraph>Instructions:</Typography>
-          {instructions}
+          {ingredientSections}
+          {instructionSections}
         </CardContent>
       </Collapse>
     </Card>

@@ -9,10 +9,10 @@
  */
 
 // eslint-disable-next-line no-unused-vars
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import type { RootState } from "../app/store";
 import axios from "axios";
 import { ROOT_URL } from "../services/phoBackend";
-import type { RootState } from "../app/store";
 
 export enum RecipeLoadingStatus {
   ERROR = "Error",
@@ -40,9 +40,52 @@ export enum RecipeTags {
 }
 
 export interface Recipe {
+  id: string;
   title: string;
-  ingredients: Array<string>;
-  instructions: Array<string>;
+  ingredients: {
+    section1: {
+      header: string;
+      ingredients: Array<string>;
+    };
+    section2: {
+      header: string;
+      ingredients: Array<string>;
+    };
+    section3: {
+      header: string;
+      ingredients: Array<string>;
+    };
+    section4: {
+      header: string;
+      ingredients: Array<string>;
+    };
+    section5: {
+      header: string;
+      ingredients: Array<string>;
+    };
+  };
+  instructions: {
+    section1: {
+      header: string;
+      instructions: Array<string>;
+    };
+    section2: {
+      header: string;
+      instructions: Array<string>;
+    };
+    section3: {
+      header: string;
+      instructions: Array<string>;
+    };
+    section4: {
+      header: string;
+      instructions: Array<string>;
+    };
+    section5: {
+      header: string;
+      instructions: Array<string>;
+    };
+  };
   tags: Array<RecipeTags>;
   calories: number;
   authorID: string; // mongo object ID of the user who added this recipe
@@ -61,6 +104,24 @@ const initialState: RecipesState = {
   recipes: [],
   loadingStatus: RecipeLoadingStatus.NOT_LOADED,
 };
+
+// Thunk functions (async functions) see redux-thunk
+// Get's all recipe data from the database and loads it into redux states
+// returns true if successful, false if an error occurred.
+export const getAndLoadRecipes = createAsyncThunk(
+  "recipes/getAndLoadRecipes",
+  async () => {
+    try {
+      console.log("in func");
+      const res = await axios.get(`${ROOT_URL}/recipes`);
+      console.log(res.data);
+      return res.data as Array<Recipe>;
+    } catch (error) {
+      console.log(`error: ${error}`);
+      return Promise.reject(error);
+    }
+  }
+);
 
 const recipesSlice = createSlice({
   name: "recipes",
@@ -83,6 +144,12 @@ const recipesSlice = createSlice({
       state.loadingStatus = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getAndLoadRecipes.fulfilled, (state, { payload }) => {
+      state.recipes = payload;
+      state.loadingStatus = RecipeLoadingStatus.LOADED;
+    });
+  },
 });
 
 export const selectRecipes = (state: RootState): Array<Recipe> =>
@@ -90,16 +157,6 @@ export const selectRecipes = (state: RootState): Array<Recipe> =>
 export const selectRecipesLoadingStatus = (
   state: RootState
 ): RecipeLoadingStatus => state.recipes.loadingStatus;
-
-export const getRecipes = async (): Promise<Array<Recipe> | null> => {
-  try {
-    const res = await axios.get(`${ROOT_URL}/recipes`);
-    return res.data as Array<Recipe>;
-  } catch (error) {
-    console.log(`error: ${error}`);
-    return null;
-  }
-};
 
 export const {
   setRecipes,

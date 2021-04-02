@@ -2,11 +2,11 @@
  * Page to browse through all of the recipe cards on the site.
  * 
  */
-import { Paper, Theme, createStyles, makeStyles } from "@material-ui/core";
-import { selectRecipes, selectRecipesLoadingStatus} from "../../redux/recipesSlice";
-import React from "react";
+import { createStyles, makeStyles, Paper, Theme, CircularProgress } from "@material-ui/core";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { getAndLoadRecipes, RecipeLoadingStatus, selectRecipes, selectRecipesLoadingStatus, setRecipesLoadingStatus } from "../../redux/recipesSlice";
 import RecipeCard from "../recipe/recipeCard";
-import { useAppSelector } from "../../app/hooks";
 
 const BrowsePage = (): JSX.Element => {
   const useStyles = makeStyles((theme: Theme) =>
@@ -21,23 +21,39 @@ const BrowsePage = (): JSX.Element => {
 
   const classes = useStyles();
 
+  const dispatch = useAppDispatch();
+
   const recipes = useAppSelector(selectRecipes);
   const recipeLoadingStatus = useAppSelector(selectRecipesLoadingStatus);
 
+  const loadSpinner = <CircularProgress />;
+
   const recipeCards = recipes.length > 0 ? recipes.map((recipe) => (
-    <RecipeCard 
+    <RecipeCard
+      id={recipe.id}
       title={recipe.title}
       ingredients={recipe.ingredients} 
       instructions={recipe.instructions}
+      tags={recipe.tags}
+      calories={recipe.calories}
+      authorID={recipe.authorID}
       dateAdded={recipe.dateAdded}
       sourceURL={recipe.sourceURL}
-      key={recipe.title}
+      key={recipe.id}
     />
   )) : null;
 
+  useEffect(() => {
+    if (recipeLoadingStatus === RecipeLoadingStatus.NOT_LOADED) {
+      dispatch(setRecipesLoadingStatus(RecipeLoadingStatus.LOADING));
+      dispatch(getAndLoadRecipes());
+    }
+  }, [recipeLoadingStatus, dispatch]);
+
   return (
     <Paper className={classes.root}>
-      {recipeCards}
+      {recipeLoadingStatus === RecipeLoadingStatus.LOADED && recipeCards}
+      {recipeLoadingStatus === RecipeLoadingStatus.LOADING && loadSpinner}
     </Paper>
   );
 };
