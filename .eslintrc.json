@@ -10,8 +10,8 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "react/react-in-jsx-scope": [0, { "extensions": [".svg"] }],
     "semi": "error",
-    "sort-imports": "error",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off",
