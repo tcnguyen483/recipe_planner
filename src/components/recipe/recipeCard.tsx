@@ -24,7 +24,7 @@ import React, { useState } from "react";
 import { Recipe } from "../../redux/recipesSlice";
 import clsx from "clsx";
 
-const RecipeCard = (props: Recipe): JSX.Element => {
+const RecipeCard: React.FC<Recipe> = (props: Recipe) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {

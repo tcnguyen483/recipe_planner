@@ -2,12 +2,13 @@
  * Page to browse through all of the recipe cards on the site.
  * 
  */
-import { CircularProgress, createStyles, Dialog, DialogContent, DialogTitle, makeStyles, Paper, Theme, DialogContentText, DialogActions, Button } from "@material-ui/core";
+import { CircularProgress, createStyles, Dialog, DialogContent, DialogTitle, makeStyles, Container, Theme, DialogContentText, DialogActions, Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getAndLoadRecipes, RecipeLoadingStatus, selectRecipes, selectRecipesLoadingStatus, setRecipesLoadingStatus } from "../../redux/recipesSlice";
 import RecipeCard from "../recipe/recipeCard";
 import DataNotFound from "../../assets/undraw_page_not_found.svg";
+import Header from "../utils/header";
 
 const BrowsePage = (): JSX.Element => {
   const useStyles = makeStyles((theme: Theme) =>
@@ -91,11 +92,14 @@ const BrowsePage = (): JSX.Element => {
   }, [recipeLoadingStatus, dispatch]);
 
   return (
-    <Paper className={classes.root}>
+    <div className={classes.root}>
+      <Header />
+      <Container >
       {recipeLoadingStatus === RecipeLoadingStatus.LOADED && recipeCards}
       {recipeLoadingStatus === RecipeLoadingStatus.LOADING && loadSpinner}
       {open && getRecipesErrorDialog && noRecipes}
-    </Paper>
+      </Container>
+    </div>
   );
 };
 

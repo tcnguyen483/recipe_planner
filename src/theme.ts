@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 // Define material UI theme
-// Documentation: 
+// Documentation:
 // https://material-ui.com/customization/theming/#theme-configuration-variables
 //------------------------------------------------------------------------------
 
@@ -9,24 +9,24 @@ import { createMuiTheme } from "@material-ui/core/styles";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#227c9d"
+      main: "#70AE5B",
     },
     secondary: {
-      main: "#ffcb77"
+      main: "#ffcb77",
     },
     error: {
-      main: "#E63B2E"
+      main: "#E63B2E",
     },
     warning: {
-      main: "#FC8422"
+      main: "#FC8422",
     },
     info: {
-      main: "#5E34AD"
+      main: "#5E34AD",
     },
     success: {
-      main: "#6CC66F"
-    }
-  }
+      main: "#6CC66F",
+    },
+  },
 });
 
 export default theme;
