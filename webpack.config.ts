@@ -20,10 +20,33 @@ const config: webpack.Configuration = {
           },
         },
       },
+      {
+        test: /\.(jpe?g|png|gif|svg|mp3)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              useRelativePath: true,
+              name: "[name].[ext]",
+            },
+          },
+        ],
+      },
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [
+      ".tsx",
+      ".ts",
+      ".js",
+      ".svg",
+      ".png",
+      ".gif",
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".mp3",
+    ],
   },
   output: {
     path: path.resolve(__dirname, "dist"),

@@ -2,11 +2,12 @@
  * Page to browse through all of the recipe cards on the site.
  * 
  */
-import { createStyles, makeStyles, Paper, Theme, CircularProgress } from "@material-ui/core";
-import React, { useEffect } from "react";
+import { CircularProgress, createStyles, Dialog, DialogContent, DialogTitle, makeStyles, Paper, Theme, DialogContentText, DialogActions, Button } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getAndLoadRecipes, RecipeLoadingStatus, selectRecipes, selectRecipesLoadingStatus, setRecipesLoadingStatus } from "../../redux/recipesSlice";
 import RecipeCard from "../recipe/recipeCard";
+import DataNotFound from "../../assets/undraw_page_not_found.svg";
 
 const BrowsePage = (): JSX.Element => {
   const useStyles = makeStyles((theme: Theme) =>
@@ -32,6 +33,35 @@ const BrowsePage = (): JSX.Element => {
   const recipes = useAppSelector(selectRecipes);
   const recipeLoadingStatus = useAppSelector(selectRecipesLoadingStatus);
 
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const getRecipesErrorDialog = (
+    <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="error getting recipe data"
+        aria-describedby="There was an error getting the recipe data, please try again later."
+    >
+        <DialogTitle id="error getting recipe data">{"We ran into a problem getting the recipes."}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Sorry for the inconvenience! We will work to fix this issue as soon as possible.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Dismiss
+          </Button>
+        </DialogActions>
+    </Dialog>
+  );
+
+  const noRecipes = <img src={DataNotFound} alt="404 data not found image" aria-label="404 data not found image" />;
+
   const loadSpinner = <CircularProgress className={classes.spinner}/>;
 
   const recipeCards = recipes.length > 0 ? recipes.map((recipe) => (
@@ -55,6 +85,7 @@ const BrowsePage = (): JSX.Element => {
       dispatch(setRecipesLoadingStatus(RecipeLoadingStatus.LOADING));
       dispatch(getAndLoadRecipes());
     } else if (recipeLoadingStatus === RecipeLoadingStatus.ERROR) {
+      setOpen(true);
       console.log("There was an error while trying to fetch the recipe data.");
     }
   }, [recipeLoadingStatus, dispatch]);
@@ -63,6 +94,7 @@ const BrowsePage = (): JSX.Element => {
     <Paper className={classes.root}>
       {recipeLoadingStatus === RecipeLoadingStatus.LOADED && recipeCards}
       {recipeLoadingStatus === RecipeLoadingStatus.LOADING && loadSpinner}
+      {open && getRecipesErrorDialog && noRecipes}
     </Paper>
   );
 };
