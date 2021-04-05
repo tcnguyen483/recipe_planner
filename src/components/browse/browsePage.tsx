@@ -14,11 +14,13 @@ const BrowsePage = (): JSX.Element => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
-        width: "100%",
-        display: "flex",
         backgroundColor: theme.palette.background.paper,
+      },
+      container: {
+        display: "flex",
+        width: "100%",
         flexWrap: "wrap",
-        flexDirection: "row"
+        flexDirection: "row",
       },
       spinner: {
         alignSelf: "center",
@@ -94,10 +96,10 @@ const BrowsePage = (): JSX.Element => {
   return (
     <div className={classes.root}>
       <Header />
-      <Container >
-      {recipeLoadingStatus === RecipeLoadingStatus.LOADED && recipeCards}
-      {recipeLoadingStatus === RecipeLoadingStatus.LOADING && loadSpinner}
-      {open && getRecipesErrorDialog && noRecipes}
+      <Container className={classes.container}>
+        {recipeLoadingStatus === RecipeLoadingStatus.LOADED && recipeCards}
+        {recipeLoadingStatus === RecipeLoadingStatus.LOADING && loadSpinner}
+        {open && getRecipesErrorDialog && noRecipes}
       </Container>
     </div>
   );
