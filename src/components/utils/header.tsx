@@ -4,6 +4,7 @@ import { AppBar, Button, Toolbar, IconButton, createStyles, makeStyles, Theme, T
 import { Home } from "@material-ui/icons";
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 type HeaderProps = RouteComponentProps
 
@@ -12,6 +13,8 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
     createStyles({
       appBar: {
         height: 50,
+        justifyContent: "center",
+        boxShadow: "none"
       },
       menuButton: {
         marginRight: theme.spacing(2),
@@ -23,6 +26,26 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
   );
 
   const classes = useStyles();
+
+  const { loginWithRedirect, logout, isAuthenticated, isLoading } = useAuth0();
+
+  const loginButton = (
+    <Button 
+      color="inherit"
+      onClick={() => loginWithRedirect()}
+    >
+      Login
+    </Button>
+  );
+
+  const logoutButton = (
+    <Button 
+      color="inherit"
+      onClick={() => logout({ returnTo: "http://localhost:8080" })}
+    >
+      Logout
+    </Button>
+  );
 
   return (
     <AppBar position="static" className={classes.appBar}>
@@ -45,6 +68,7 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
           >
             Browse
           </Button>
+          {!isLoading && isAuthenticated ? logoutButton : loginButton}
         </Toolbar>
     </AppBar>
   );

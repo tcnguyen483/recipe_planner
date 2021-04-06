@@ -11,18 +11,17 @@ import {
   CardContent,
   CardHeader,
   Collapse,
-  IconButton, 
+  createStyles, IconButton,
   Link,
   ListItem,
   ListItemText,
-  Theme,
-  Typography, createStyles,
-  makeStyles
+  makeStyles, Theme,
+  Typography
 } from "@material-ui/core";
-import { Create, ExpandMore, Favorite, Share } from "@material-ui/icons";
+import { ExpandMore, Favorite } from "@material-ui/icons";
+import clsx from "clsx";
 import React, { useState } from "react";
 import { Recipe } from "../../redux/recipesSlice";
-import clsx from "clsx";
 
 const RecipeCard: React.FC<Recipe> = (props: Recipe) => {
   const useStyles = makeStyles((theme: Theme) =>
@@ -30,7 +29,10 @@ const RecipeCard: React.FC<Recipe> = (props: Recipe) => {
       root: {
         width: 345,
         margin: 8,
-        height: "min-content"
+        height: "min-content",
+        "&hover": {
+          
+        }
       },
       media: {
         height: 0,
@@ -113,11 +115,6 @@ const RecipeCard: React.FC<Recipe> = (props: Recipe) => {
   return (
     <Card className={classes.root}>
       <CardHeader
-        action={
-          <IconButton aria-label="edit">
-            <Create />
-          </IconButton>
-        }
         title={props.title}
         subheader={originalSourceLink}
       />
@@ -125,9 +122,6 @@ const RecipeCard: React.FC<Recipe> = (props: Recipe) => {
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
           <Favorite />
-        </IconButton>
-        <IconButton aria-label="share">
-          <Share />
         </IconButton>
         <IconButton
           className={clsx(classes.expand, {

@@ -21,6 +21,7 @@ const BrowsePage = (): JSX.Element => {
         width: "100%",
         flexWrap: "wrap",
         flexDirection: "row",
+        paddingTop: 16
       },
       spinner: {
         alignSelf: "center",
@@ -56,7 +57,7 @@ const BrowsePage = (): JSX.Element => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button onClick={handleClose} color="primary">
             Dismiss
           </Button>
         </DialogActions>
@@ -99,7 +100,8 @@ const BrowsePage = (): JSX.Element => {
       <Container className={classes.container}>
         {recipeLoadingStatus === RecipeLoadingStatus.LOADED && recipeCards}
         {recipeLoadingStatus === RecipeLoadingStatus.LOADING && loadSpinner}
-        {open && getRecipesErrorDialog && noRecipes}
+        {recipeLoadingStatus === RecipeLoadingStatus.ERROR && noRecipes}
+        {open && getRecipesErrorDialog}
       </Container>
     </div>
   );
