@@ -6,26 +6,22 @@
 
 export const MANAGEMENT_API_URL = "https://recipe-planner.us.auth0.com/api/v2";
 
+export const APP_NAMESPACE = "http://localhost:8080/";
+
 // Documented here: https://auth0.com/docs/api/management/v2#!/Users/get_users_by_id
+// NOTE: not all of the fields specified in the docs are exposed by the useAuth0() hook
+// Custom fields can be added using this rule: https://manage.auth0.com/dashboard/us/recipe-planner/rules/rul_TvNgfuvAajffdUck
 export interface Auth0UserData {
-  user_id: string;
+  sub: string;
   email: string;
   email_verified: boolean;
-  username: string;
-  phone_number: string;
-  phone_verified: boolean;
-  created_at: string;
   updated_at: string;
   picture: string;
   name: string;
   nickname: string;
-  multifactor: Array<string>;
-  last_ip: string;
-  last_login: string;
-  logins_count: number;
-  blocked: boolean;
-  given_name: string;
-  family_name: string;
+  created_at: string;
+  "http://localhost:8080/user_id": string;
+  "http://localhost:8080/logins_count": number;
 }
 
 export enum ManagementApiScopes {

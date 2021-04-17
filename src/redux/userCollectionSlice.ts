@@ -53,6 +53,11 @@ export interface deleteSavedRecipeIDPayload {
   auth0UserID: string;
 }
 
+export interface createUserCollectionPayload {
+  accessToken: string;
+  auth0UserID: string;
+}
+
 const initialState: UserCollectionState = {
   savedRecipeIDs: [],
   recipeHistory: [],
@@ -74,7 +79,43 @@ export const loadUserCollection = createAsyncThunk(
         },
       };
       const res = await axios.get(
-        `${PHO_URL}/users/${payload.user.user_id}`,
+        `${PHO_URL}/users/${payload.user["http://localhost:8080/user_id"]}`,
+        axiosConfig
+      );
+      const phoUserData = res.data as PhoUserData;
+
+      return {
+        savedRecipeIDs: phoUserData.savedRecipeIDs,
+        recipeHistory: phoUserData.recipeHistory,
+        loadingStatus: UserCollectionLoadingStatus.LOADED,
+      } as UserCollectionState;
+    } catch (error) {
+      console.log(`error: ${error}`);
+      return Promise.reject(error);
+    }
+  }
+);
+
+// Create a new entry in user table in database and loads it into redux state
+export const createUserCollection = createAsyncThunk(
+  "userCollection/createUserCollection",
+  async (payload: createUserCollectionPayload) => {
+    try {
+      // get app related user data from pho backend
+      const axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${payload.accessToken}`,
+          timeout: 30000,
+          returnRejectedPromiseOnError: true,
+        },
+      };
+      const res = await axios.post(
+        `${PHO_URL}/users/`,
+        {
+          auth0ID: payload.auth0UserID,
+          savedRecipeIDs: [],
+          recipeHistory: [],
+        },
         axiosConfig
       );
       const phoUserData = res.data as PhoUserData;
@@ -259,6 +300,12 @@ const userCollectionSlice = createSlice({
     });
     builder.addCase(deleteSavedRecipeID.fulfilled, (state, { payload }) => {
       state = payload;
+    });
+    builder.addCase(createUserCollection.fulfilled, (state, { payload }) => {
+      state = payload;
+    });
+    builder.addCase(createUserCollection.rejected, (state) => {
+      state.loadingStatus = UserCollectionLoadingStatus.ERROR;
     });
   },
 });
