@@ -125,7 +125,7 @@ const initialState: RecipesState = {
 // Get's all recipe data from the database and loads it into redux states
 export const loadRecipes = createAsyncThunk("recipes/loadRecipes", async () => {
   try {
-    const res = await axios.get(`${PHO_URL}/recipes`);
+    const res = await axios.get(`${PHO_URL}recipes`);
     return res.data as Array<Recipe>;
   } catch (error) {
     console.log(`error: ${error}`);
@@ -146,7 +146,7 @@ export const createRecipe = createAsyncThunk(
         },
       };
       const res = await axios.post(
-        `${PHO_URL}/recipes`,
+        `${PHO_URL}recipes`,
         payload.recipe,
         axiosConfig
       );
@@ -172,7 +172,7 @@ export const editRecipe = createAsyncThunk(
         },
       };
       const res = await axios.put(
-        `${PHO_URL}/recipes/${payload.recipeID}`,
+        `${PHO_URL}recipes/${payload.recipeID}`,
         payload.newRecipe,
         axiosConfig
       );
@@ -198,7 +198,7 @@ export const deleteRecipe = createAsyncThunk(
         },
       };
       const res = await axios.delete(
-        `${PHO_URL}/recipes/${payload.recipeID}`,
+        `${PHO_URL}recipes/${payload.recipeID}`,
         axiosConfig
       );
       console.log(res.status);

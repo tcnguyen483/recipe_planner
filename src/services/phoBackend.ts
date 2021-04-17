@@ -4,7 +4,7 @@
  */
 
 // export const PHO_URL = "http://localhost:9090"; // FOR DEV ONLY
-export const PHO_URL = "https://recipe-planner-pho.herokuapp.com";
+export const PHO_URL = "https://recipe-planner-pho.herokuapp.com/";
 
 export enum Meal {
   BREAKFAST = "Breakfast",

@@ -79,7 +79,7 @@ export const loadUserCollection = createAsyncThunk(
         },
       };
       const res = await axios.get(
-        `${PHO_URL}/users/${payload.user["http://localhost:8080/user_id"]}`,
+        `${PHO_URL}users/${payload.user["http://localhost:8080/user_id"]}`,
         axiosConfig
       );
       const phoUserData = res.data as PhoUserData;
@@ -110,7 +110,7 @@ export const createUserCollection = createAsyncThunk(
         },
       };
       const res = await axios.post(
-        `${PHO_URL}/users/`,
+        `${PHO_URL}users/`,
         {
           auth0ID: payload.auth0UserID,
           savedRecipeIDs: [],
@@ -146,13 +146,13 @@ export const pushRecipeHistory = createAsyncThunk(
       };
 
       const getRes = await axios.get(
-        `${PHO_URL}/users/${payload.auth0UserID}`,
+        `${PHO_URL}users/${payload.auth0UserID}`,
         axiosConfig
       );
       const currUserData = getRes.data as PhoUserData;
 
       const putRes = await axios.put(
-        `${PHO_URL}/users/${payload.auth0UserID}`,
+        `${PHO_URL}users/${payload.auth0UserID}`,
         {
           auth0ID: payload.auth0UserID,
           savedRecipeIDs: currUserData.savedRecipeIDs,
@@ -188,13 +188,13 @@ export const pushSavedRecipeID = createAsyncThunk(
       };
 
       const getRes = await axios.get(
-        `${PHO_URL}/users/${payload.auth0UserID}`,
+        `${PHO_URL}users/${payload.auth0UserID}`,
         axiosConfig
       );
       const currUserData = getRes.data as PhoUserData;
 
       const putRes = await axios.put(
-        `${PHO_URL}/users/${payload.auth0UserID}`,
+        `${PHO_URL}users/${payload.auth0UserID}`,
         {
           auth0ID: payload.auth0UserID,
           savedRecipeIDs: currUserData.savedRecipeIDs.push(
@@ -233,7 +233,7 @@ export const deleteSavedRecipeID = createAsyncThunk(
       };
 
       const getRes = await axios.get(
-        `${PHO_URL}/users/${payload.auth0UserID}`,
+        `${PHO_URL}users/${payload.auth0UserID}`,
         axiosConfig
       );
       const currUserData = getRes.data as PhoUserData;
@@ -250,7 +250,7 @@ export const deleteSavedRecipeID = createAsyncThunk(
       };
 
       const putRes = await axios.put(
-        `${PHO_URL}/users/${payload.auth0UserID}`,
+        `${PHO_URL}users/${payload.auth0UserID}`,
         resPayload,
         axiosConfig
       );
