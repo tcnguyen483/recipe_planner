@@ -2,13 +2,13 @@
 
 import { AppBar, Button, Toolbar, IconButton, createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
 import { Home } from "@material-ui/icons";
-import React from "react";
+import React, { FC, ReactElement } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 type HeaderProps = RouteComponentProps
 
-const Header: React.FC<HeaderProps> = ({ history }) => {
+const Header: FC<HeaderProps> = ({ history }): ReactElement => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       appBar: {
@@ -67,6 +67,12 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
             onClick={() => history.push("/browse")}
           >
             Browse
+          </Button>
+          <Button 
+            color="inherit"
+            onClick={() => history.push("/recipeBook")}
+          >
+            Recipe Book
           </Button>
           {!isLoading && isAuthenticated ? logoutButton : loginButton}
         </Toolbar>

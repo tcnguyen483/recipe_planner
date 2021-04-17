@@ -7,10 +7,12 @@
  */
 import { configureStore } from "@reduxjs/toolkit";
 import recipesReducer from "../redux/recipesSlice";
+import userCollectionReducer from "../redux/userCollectionSlice";
 
 const store = configureStore({
   reducer: {
     recipes: recipesReducer,
+    userCollection: userCollectionReducer,
   },
 });
 

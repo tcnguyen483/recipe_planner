@@ -20,19 +20,16 @@ import {
 } from "@material-ui/core";
 import { ExpandMore, Favorite } from "@material-ui/icons";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useState, FC, ReactElement } from "react";
 import { Recipe } from "../../redux/recipesSlice";
 
-const RecipeCard: React.FC<Recipe> = (props: Recipe) => {
+const RecipeCard: FC<Recipe> = (props: Recipe): ReactElement => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
         width: 345,
         margin: 8,
         height: "min-content",
-        "&hover": {
-          
-        }
       },
       media: {
         height: 0,

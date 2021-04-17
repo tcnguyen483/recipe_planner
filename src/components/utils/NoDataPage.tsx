@@ -1,11 +1,11 @@
 // no data error screen
 
 import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
-import React from "react";
+import React, { FC, ReactElement } from "react";
 import DataNotFound from "../../assets/undraw_page_not_found.svg";
 import Header from "./header";
 
-const NoDataPage = (): JSX.Element => {
+const NoDataPage: FC = (): ReactElement => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {

@@ -1,10 +1,10 @@
 // no data error screen
 
 import { Container, createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
-import React from "react";
+import React, { FC, ReactElement } from "react";
 import Header from "../utils/header";
 
-const HomePage = (): JSX.Element => {
+const HomePage: FC = (): ReactElement => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {

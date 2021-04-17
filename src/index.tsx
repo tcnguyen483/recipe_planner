@@ -17,6 +17,8 @@ ReactDOM.render(
     domain="recipe-planner.us.auth0.com"
     clientId="HuARKX156NMQJX4qD0cfzVuCMPllZXMb"
     redirectUri="http://localhost:8080/browse"
+    audience="https://recipe-planner-pho.herokuapp.com/"
+    scope="read:current_user update:current_user"
   >
     <ThemeProvider theme={Theme}>
       <ReduxProvider store={ReduxStore}>

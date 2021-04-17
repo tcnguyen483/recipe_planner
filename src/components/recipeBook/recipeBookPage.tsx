@@ -1,17 +1,21 @@
 /*
- * Page to browse through all of the recipe cards on the site.
+ * Page with all of the recipes the user has saved.
  * 
  */
+import { useAuth0 } from "@auth0/auth0-react";
 import { Button, Container, createStyles, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, makeStyles, Theme } from "@material-ui/core";
 import React, { FC, ReactElement, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import DataNotFound from "../../assets/undraw_page_not_found.svg";
 import { loadRecipes, RecipeLoadingStatus, selectRecipes, selectRecipesLoadingStatus, setRecipesLoadingStatus } from "../../redux/recipesSlice";
+import { loadUserCollection, loadUserCollectionPayload, selectSavedRecipeIDs, selectUserCollectionLoadingStatus, setUserCollectionLoadingStatus, UserCollectionLoadingStatus } from "../../redux/userCollectionSlice";
+import { Auth0UserData } from "../../services/auth0Management";
+import { PhoScopes, PHO_URL } from "../../services/phoBackend";
 import RecipeCard from "../recipe/recipeCard";
 import Header from "../utils/header";
 import Spinner from "../utils/loadingSpinner";
 
-const BrowsePage: FC = (): ReactElement => {
+const RecipeBookPage: FC = (): ReactElement => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
@@ -23,16 +27,22 @@ const BrowsePage: FC = (): ReactElement => {
         flexWrap: "wrap",
         flexDirection: "row",
         paddingTop: 16
-      }
+      },
     }),
   );
 
   const classes = useStyles();
 
+  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+  const { user }: { user?: Auth0UserData } = useAuth0();
+
   const dispatch = useAppDispatch();
 
-  const recipes = useAppSelector(selectRecipes);
+  const savedRecipeIDs = useAppSelector(selectSavedRecipeIDs); 
+
+  const savedRecipes = useAppSelector(selectRecipes).filter(recipe => savedRecipeIDs.includes(recipe.id));
   const recipeLoadingStatus = useAppSelector(selectRecipesLoadingStatus);
+  const userCollectionLoadingStatus = useAppSelector(selectUserCollectionLoadingStatus);
 
   const [open, setOpen] = useState(false);
 
@@ -44,10 +54,10 @@ const BrowsePage: FC = (): ReactElement => {
     <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="error getting recipe data"
-        aria-describedby="There was an error getting the recipe data, please try again later."
+        aria-labelledby="error getting user's recipe data"
+        aria-describedby="There was an error getting the user's recipe data, please try again later."
     >
-        <DialogTitle id="error getting recipe data">{"We ran into a problem getting the recipes."}</DialogTitle>
+        <DialogTitle id="error getting recipe user's data">{"We ran into a problem getting your recipes."}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Sorry for the inconvenience! We will work to fix this issue as soon as possible.
@@ -63,7 +73,8 @@ const BrowsePage: FC = (): ReactElement => {
 
   const noRecipes = <img src={DataNotFound} alt="404 data not found image" aria-label="404 data not found image" />;
 
-  const recipeCards = recipes.length > 0 ? recipes.map((recipe) => (
+
+  const recipeCards = savedRecipes.length > 0 ? savedRecipes.map((recipe) => (
     <RecipeCard
       id={recipe.id}
       title={recipe.title}
@@ -89,6 +100,37 @@ const BrowsePage: FC = (): ReactElement => {
     }
   }, [recipeLoadingStatus, dispatch]);
 
+  useEffect(() => {
+    const loadUserCollectionState = async () => {
+      if (isLoading || !isAuthenticated) {
+        return;
+      }
+      if (userCollectionLoadingStatus === UserCollectionLoadingStatus.NOT_LOADED){
+        try {
+          dispatch(setUserCollectionLoadingStatus(UserCollectionLoadingStatus.LOADING));
+          const phoAccessToken = await getAccessTokenSilently({
+            audience: PHO_URL,
+            scope: PhoScopes.READ_CURRENT_USER,
+          });
+  
+          const payload = {
+            user: user,
+            phoAccessToken: phoAccessToken,
+          } as loadUserCollectionPayload;
+  
+          dispatch(loadUserCollection(payload));
+        } catch (error) {
+          console.log(error.message);
+        }
+      } else if (userCollectionLoadingStatus === UserCollectionLoadingStatus.ERROR) {
+        setOpen(true);
+        console.log("There was an error while trying to fetch your app data.");
+      }
+    };
+    loadUserCollectionState();
+  
+  }, [dispatch, getAccessTokenSilently, isAuthenticated, isLoading, user, userCollectionLoadingStatus]);
+
   return (
     <div className={classes.root}>
       <Header />
@@ -102,4 +144,4 @@ const BrowsePage: FC = (): ReactElement => {
   );
 };
 
-export default BrowsePage;
+export default RecipeBookPage;

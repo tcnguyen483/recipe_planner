@@ -48,5 +48,8 @@
     "webpack": "^5.27.2",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.2"
+  },
+  "devDependencies": {
+    "@types/auth0": "^2.33.3"
   }
 }
