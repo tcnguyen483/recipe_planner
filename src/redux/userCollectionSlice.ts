@@ -133,141 +133,136 @@ export const createUserCollection = createAsyncThunk(
 );
 
 // Add a new recipe record to recipe history in database and in redux state
-export const pushRecipeHistory = createAsyncThunk(
-  "userCollection/pushRecipeHistory",
-  async (payload: pushRecipeHistoryPayload) => {
-    try {
-      const axiosConfig = {
-        headers: {
-          Authorization: `Bearer ${payload.accessToken}`,
-          timeout: 30000,
-          returnRejectedPromiseOnError: true,
-        },
-      };
+export const pushRecipeHistory = createAsyncThunk<
+  UserCollectionState,
+  pushRecipeHistoryPayload,
+  { state: RootState }
+>("userCollection/pushRecipeHistory", async (payload, thunkAPI) => {
+  try {
+    const state = thunkAPI.getState();
+    const currUserData: UserCollectionState = state.userCollection;
 
-      const getRes = await axios.get(
-        `${PHO_URL}users/${payload.auth0UserID}`,
-        axiosConfig
-      );
-      const currUserData = getRes.data as PhoUserData;
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${payload.accessToken}`,
+        timeout: 30000,
+        returnRejectedPromiseOnError: true,
+      },
+    };
 
-      const putRes = await axios.put(
-        `${PHO_URL}users/${payload.auth0UserID}`,
-        {
-          auth0ID: payload.auth0UserID,
-          savedRecipeIDs: currUserData.savedRecipeIDs,
-          recipeHistory: currUserData.recipeHistory.push(payload.recipeRecord),
-        },
-        axiosConfig
-      );
-      const updatedUserCollectionData = putRes.data as PhoUserData;
+    const putRes = await axios.put(
+      `${PHO_URL}users/${payload.auth0UserID}`,
+      {
+        auth0ID: payload.auth0UserID,
+        savedRecipeIDs: currUserData.savedRecipeIDs,
+        recipeHistory: currUserData.recipeHistory.push(payload.recipeRecord),
+      },
+      axiosConfig
+    );
+    const updatedUserCollectionData = putRes.data as PhoUserData;
 
-      return {
-        savedRecipeIDs: updatedUserCollectionData.savedRecipeIDs,
-        recipeHistory: updatedUserCollectionData.recipeHistory,
-        loadingStatus: UserCollectionLoadingStatus.LOADED,
-      } as UserCollectionState;
-    } catch (error) {
-      console.log(`error: ${error}`);
-      return Promise.reject(error);
-    }
+    return {
+      savedRecipeIDs: updatedUserCollectionData.savedRecipeIDs,
+      recipeHistory: updatedUserCollectionData.recipeHistory,
+      loadingStatus: UserCollectionLoadingStatus.LOADED,
+    } as UserCollectionState;
+  } catch (error) {
+    console.log(`error: ${error}`);
+    return Promise.reject(error);
   }
-);
+});
 
 // Add a new recipeID to the saved recipes in the database and in redux state
-export const pushSavedRecipeID = createAsyncThunk(
-  "userCollection/pushSavedRecipeID",
-  async (payload: pushSavedRecipeIDPayload) => {
-    try {
-      const axiosConfig = {
-        headers: {
-          Authorization: `Bearer ${payload.accessToken}`,
-          timeout: 30000,
-          returnRejectedPromiseOnError: true,
-        },
-      };
+export const pushSavedRecipeID = createAsyncThunk<
+  UserCollectionState,
+  pushSavedRecipeIDPayload,
+  { state: RootState }
+>("userCollection/pushSavedRecipeID", async (payload, thunkAPI) => {
+  try {
+    const state = thunkAPI.getState();
+    const currUserData: UserCollectionState = state.userCollection;
 
-      const getRes = await axios.get(
-        `${PHO_URL}users/${payload.auth0UserID}`,
-        axiosConfig
-      );
-      const currUserData = getRes.data as PhoUserData;
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${payload.accessToken}`,
+        timeout: 30000,
+        returnRejectedPromiseOnError: true,
+      },
+    };
 
-      const putRes = await axios.put(
-        `${PHO_URL}users/${payload.auth0UserID}`,
-        {
-          auth0ID: payload.auth0UserID,
-          savedRecipeIDs: currUserData.savedRecipeIDs.push(
-            payload.savedRecipeID
-          ),
-          recipeHistory: currUserData.recipeHistory,
-        },
-        axiosConfig
-      );
+    currUserData.savedRecipeIDs.push(payload.savedRecipeID);
 
-      const updatedUserCollectionData = putRes.data as PhoUserData;
+    const putRes = await axios.put(
+      `${PHO_URL}users/${payload.auth0UserID}`,
+      {
+        auth0ID: payload.auth0UserID,
+        savedRecipeIDs: currUserData.savedRecipeIDs,
+        recipeHistory: currUserData.recipeHistory,
+      },
+      axiosConfig
+    );
 
-      return {
-        savedRecipeIDs: updatedUserCollectionData.savedRecipeIDs,
-        recipeHistory: updatedUserCollectionData.recipeHistory,
-        loadingStatus: UserCollectionLoadingStatus.LOADED,
-      } as UserCollectionState;
-    } catch (error) {
-      console.log(`error: ${error}`);
-      return Promise.reject(error);
-    }
+    const updatedUserCollectionData = putRes.data as PhoUserData;
+    console.log(updatedUserCollectionData);
+
+    return {
+      savedRecipeIDs: updatedUserCollectionData.savedRecipeIDs,
+      recipeHistory: updatedUserCollectionData.recipeHistory,
+      loadingStatus: UserCollectionLoadingStatus.LOADED,
+    } as UserCollectionState;
+  } catch (error) {
+    console.log(`error: ${error}`);
+    return Promise.reject(error);
   }
-);
+});
 
 // Remove a recipeID from the saved recipes in the database and in redux state
-export const deleteSavedRecipeID = createAsyncThunk(
-  "userCollection/deleteSavedRecipeID",
-  async (payload: deleteSavedRecipeIDPayload) => {
-    try {
-      const axiosConfig = {
-        headers: {
-          Authorization: `Bearer ${payload.accessToken}`,
-          timeout: 30000,
-          returnRejectedPromiseOnError: true,
-        },
-      };
+export const deleteSavedRecipeID = createAsyncThunk<
+  UserCollectionState,
+  deleteSavedRecipeIDPayload,
+  { state: RootState }
+>("userCollection/deleteSavedRecipeID", async (payload, thunkAPI) => {
+  try {
+    const state = thunkAPI.getState();
+    const currUserData: UserCollectionState = state.userCollection;
 
-      const getRes = await axios.get(
-        `${PHO_URL}users/${payload.auth0UserID}`,
-        axiosConfig
-      );
-      const currUserData = getRes.data as PhoUserData;
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${payload.accessToken}`,
+        timeout: 30000,
+        returnRejectedPromiseOnError: true,
+      },
+    };
 
-      const idx = currUserData.savedRecipeIDs.indexOf(payload.savedRecipeID);
+    const idx = currUserData.savedRecipeIDs.indexOf(payload.savedRecipeID);
 
-      const resPayload = {
-        auth0ID: payload.auth0UserID,
-        savedRecipeIDs:
-          idx > -1
-            ? currUserData.savedRecipeIDs.splice(idx, 1)
-            : currUserData.savedRecipeIDs,
-        recipeHistory: currUserData.recipeHistory,
-      };
+    const resPayload = {
+      auth0ID: payload.auth0UserID,
+      savedRecipeIDs:
+        idx > -1
+          ? currUserData.savedRecipeIDs.splice(idx, 1)
+          : currUserData.savedRecipeIDs,
+      recipeHistory: currUserData.recipeHistory,
+    };
 
-      const putRes = await axios.put(
-        `${PHO_URL}users/${payload.auth0UserID}`,
-        resPayload,
-        axiosConfig
-      );
+    const putRes = await axios.put(
+      `${PHO_URL}users/${payload.auth0UserID}`,
+      resPayload,
+      axiosConfig
+    );
 
-      const updatedUserCollectionData = putRes.data as PhoUserData;
+    const updatedUserCollectionData = putRes.data as PhoUserData;
 
-      return {
-        savedRecipeIDs: updatedUserCollectionData.savedRecipeIDs,
-        recipeHistory: updatedUserCollectionData.recipeHistory,
-        loadingStatus: UserCollectionLoadingStatus.LOADED,
-      } as UserCollectionState;
-    } catch (error) {
-      console.log(`error: ${error}`);
-      return Promise.reject(error);
-    }
+    return {
+      savedRecipeIDs: updatedUserCollectionData.savedRecipeIDs,
+      recipeHistory: updatedUserCollectionData.recipeHistory,
+      loadingStatus: UserCollectionLoadingStatus.LOADED,
+    } as UserCollectionState;
+  } catch (error) {
+    console.log(`error: ${error}`);
+    return Promise.reject(error);
   }
-);
+});
 
 const userCollectionSlice = createSlice({
   name: "userCollection",

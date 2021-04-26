@@ -5,6 +5,7 @@
  * https://material-ui.com/components/cards/#RecipeReviewCard.tsx
  */
 
+import { useAuth0 } from "@auth0/auth0-react";
 import {
   Card,
   CardActions,
@@ -22,6 +23,10 @@ import { ExpandMore, Favorite } from "@material-ui/icons";
 import clsx from "clsx";
 import React, { useState, FC, ReactElement } from "react";
 import { Recipe } from "../../redux/recipesSlice";
+import { pushSavedRecipeID, pushSavedRecipeIDPayload } from "../../redux/userCollectionSlice";
+import { useAppDispatch } from "../../app/hooks";
+import { Auth0UserData } from "../../services/auth0Management";
+import { PhoScopes, PHO_URL } from "../../services/phoBackend";
 
 const RecipeCard: FC<Recipe> = (props: Recipe): ReactElement => {
   const useStyles = makeStyles((theme: Theme) =>
@@ -53,6 +58,11 @@ const RecipeCard: FC<Recipe> = (props: Recipe): ReactElement => {
 
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
+
+  const dispatch = useAppDispatch();
+
+  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+  const { user }: { user?: Auth0UserData } = useAuth0();
 
   const ingredientSections = Object.values(props.ingredients).map((section) => {
     const { header, ingredients } = section;
@@ -109,6 +119,23 @@ const RecipeCard: FC<Recipe> = (props: Recipe): ReactElement => {
     setExpanded(!expanded);
   };
 
+  const saveRecipe = async () => {
+    if (!isLoading && isAuthenticated) {
+      const phoAccessToken = await getAccessTokenSilently({
+        audience: PHO_URL,
+        scope: PhoScopes.UPDATE_CURRENT_USER,
+      });
+  
+      const payload = {
+        accessToken: phoAccessToken,
+        savedRecipeID: props.id,
+        auth0UserID: user && user["http://localhost:8080/user_id"]
+      } as pushSavedRecipeIDPayload;
+  
+      dispatch(pushSavedRecipeID(payload));
+    }
+  };
+
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -117,7 +144,7 @@ const RecipeCard: FC<Recipe> = (props: Recipe): ReactElement => {
       />
       {props.description && description}
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
+        <IconButton aria-label="add recipe to saved recipes" onClick={saveRecipe}>
           <Favorite />
         </IconButton>
         <IconButton

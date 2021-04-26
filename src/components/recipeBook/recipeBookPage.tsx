@@ -7,7 +7,7 @@ import { Button, Container, createStyles, Dialog, DialogActions, DialogContent, 
 import React, { FC, ReactElement, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import DataNotFound from "../../assets/undraw_page_not_found.svg";
-import { loadRecipes, RecipeLoadingStatus, selectRecipes, selectRecipesLoadingStatus, setRecipesLoadingStatus } from "../../redux/recipesSlice";
+import { loadRecipes, RecipeLoadingStatus, selectRecipes, selectRecipesLoadingStatus, setRecipesLoadingStatus, Recipe } from "../../redux/recipesSlice";
 import { loadUserCollection, loadUserCollectionPayload, selectSavedRecipeIDs, selectUserCollectionLoadingStatus, setUserCollectionLoadingStatus, UserCollectionLoadingStatus } from "../../redux/userCollectionSlice";
 import { Auth0UserData } from "../../services/auth0Management";
 import { PhoScopes, PHO_URL } from "../../services/phoBackend";
@@ -40,11 +40,13 @@ const RecipeBookPage: FC = (): ReactElement => {
 
   const savedRecipeIDs = useAppSelector(selectSavedRecipeIDs); 
 
-  const savedRecipes = useAppSelector(selectRecipes).filter(recipe => savedRecipeIDs.includes(recipe.id));
   const recipeLoadingStatus = useAppSelector(selectRecipesLoadingStatus);
   const userCollectionLoadingStatus = useAppSelector(selectUserCollectionLoadingStatus);
 
+  const recipes = useAppSelector(selectRecipes);
+
   const [open, setOpen] = useState(false);
+  const [savedRecipes, setSavedRecipes] = useState([] as Array<Recipe>);
 
   const handleClose = () => {
     setOpen(false);
@@ -89,6 +91,11 @@ const RecipeBookPage: FC = (): ReactElement => {
       key={recipe.id}
     />
   )) : null;
+
+  useEffect(() => {
+    console.log(savedRecipeIDs);
+    setSavedRecipes(recipes.filter(recipe => savedRecipeIDs.includes(recipe.id)));
+  }, [recipes, savedRecipeIDs]);
 
   useEffect(() => {
     if (recipeLoadingStatus === RecipeLoadingStatus.NOT_LOADED) {

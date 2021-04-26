@@ -45,7 +45,6 @@ const App: FC = (): ReactElement => {
         console.log(error.message);
       }
     };
-    console.log(user);
     // fix this to check the DB to see if the entry exists    
     if (!isLoading && isAuthenticated && user && user["http://localhost:8080/logins_count"] === 1) {
       createAndLoadUserCollection();

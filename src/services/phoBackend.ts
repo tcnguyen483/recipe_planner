@@ -31,7 +31,7 @@ export enum PhoScopes {
   CREATE_USER = "create:user",
   DELETE_USER = "delete:user",
   READ_CURRENT_USER = "read:current_user",
-  UPDATE_CURRENT_USER = "update:current_userread:current_user",
+  UPDATE_CURRENT_USER = "update:current_user",
   DELETE_RECIPE = "delete:recipe",
   UPDATE_RECIPE = "update:recipe",
 }
