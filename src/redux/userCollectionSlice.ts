@@ -150,12 +150,18 @@ export const pushRecipeHistory = createAsyncThunk<
       },
     };
 
+    // test to see if the shallow copy works in this situation
+    const updatedRecipeHistory = [
+      ...currUserData.recipeHistory,
+      payload.recipeRecord,
+    ];
+
     const putRes = await axios.put(
       `${PHO_URL}users/${payload.auth0UserID}`,
       {
         auth0ID: payload.auth0UserID,
         savedRecipeIDs: currUserData.savedRecipeIDs,
-        recipeHistory: currUserData.recipeHistory.push(payload.recipeRecord),
+        recipeHistory: updatedRecipeHistory,
       },
       axiosConfig
     );
@@ -190,13 +196,16 @@ export const pushSavedRecipeID = createAsyncThunk<
       },
     };
 
-    currUserData.savedRecipeIDs.push(payload.savedRecipeID);
+    const updatedRecipeIDs = [
+      ...currUserData.savedRecipeIDs,
+      payload.savedRecipeID,
+    ];
 
     const putRes = await axios.put(
       `${PHO_URL}users/${payload.auth0UserID}`,
       {
         auth0ID: payload.auth0UserID,
-        savedRecipeIDs: currUserData.savedRecipeIDs,
+        savedRecipeIDs: updatedRecipeIDs,
         recipeHistory: currUserData.recipeHistory,
       },
       axiosConfig
@@ -234,14 +243,11 @@ export const deleteSavedRecipeID = createAsyncThunk<
       },
     };
 
-    const idx = currUserData.savedRecipeIDs.indexOf(payload.savedRecipeID);
-
     const resPayload = {
       auth0ID: payload.auth0UserID,
-      savedRecipeIDs:
-        idx > -1
-          ? currUserData.savedRecipeIDs.splice(idx, 1)
-          : currUserData.savedRecipeIDs,
+      savedRecipeIDs: currUserData.savedRecipeIDs.filter(
+        (id) => id !== payload.savedRecipeID
+      ),
       recipeHistory: currUserData.recipeHistory,
     };
 
